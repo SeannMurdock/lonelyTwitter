@@ -7,7 +7,7 @@ import junit.framework.TestCase;
 /**
  * Created by murdock on 9/29/15.
  */
-public class TweetListTest extends ActivityInstrumentationTestCase2 {
+public class TweetListTest extends ActivityInstrumentationTestCase2  implements MyObserver {
     public TweetListTest() {
         super(ca.ualberta.cs.lonelytwitter.LonelyTwitterActivity.class);
     }
@@ -35,7 +35,7 @@ public class TweetListTest extends ActivityInstrumentationTestCase2 {
         list.add(new NormalTweet("test2"));
         assertEquals(list.getcount(), 2);
     }
-    
+
     public void testGetTweets(){
         TweetList list = new TweetList();
         Tweet tweet = new NormalTweet("test");
@@ -51,7 +51,7 @@ public class TweetListTest extends ActivityInstrumentationTestCase2 {
         list.add(tweet);
         list.add(new NormalTweet("test2"));
         list.add(new NormalTweet("test3"));
-        assertEquals(list.hasTweet(tweet), true);
+        assertTrue(list.hasTweet(tweet.getText()));
     }
 
     public void testAddDuplicateTweet(){
@@ -81,5 +81,38 @@ public class TweetListTest extends ActivityInstrumentationTestCase2 {
         list.add(tweet2);
         list.add(tweet3);
         assertEquals(list.removeTweet(tweet2), 1);
+    }
+
+    private Boolean weWereNotified;
+
+    public void myNotify(MyObservable observable) {
+       weWereNotified = Boolean.TRUE;
+
+    }
+
+    public void testObservable(){
+        TweetList list = new TweetList();
+        // needs an addObserver
+        list.addObserver(this);
+        Tweet tweet = new NormalTweet("test10");
+        // we shouldn't have gotten notified here
+        weWereNotified = Boolean.FALSE;
+        list.add(tweet);
+        // we should have been notified here
+        assertTrue(weWereNotified);
+    }
+
+    public void testModifyTweetInList() {
+        TweetList list = new TweetList();
+        //
+        // needs an addObserver
+        list.addObserver(this);
+        Tweet tweet = new NormalTweet("test11");
+        // we shouldn't have gotten notified here
+        weWereNotified = Boolean.FALSE;
+        list.add(tweet);
+        weWereNotified = Boolean.FALSE;
+        tweet.setText("different test");
+        assertTrue(weWereNotified);
     }
 }
