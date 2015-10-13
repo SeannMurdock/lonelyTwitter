@@ -11,6 +11,11 @@ import java.util.ArrayList;
 // want to make observable
 public class TweetList implements MyObservable, MyObserver {
     private Tweet mostRecentTweet;                                     //model
+
+    public ArrayList<Tweet> getTweets() {
+        return tweets;
+    }
+
     private ArrayList<Tweet> tweets =  new ArrayList<Tweet>();             //model
 
     public void add(Tweet tweet){                                       //model
@@ -24,9 +29,9 @@ public class TweetList implements MyObservable, MyObserver {
         }
     }
 
-    public ArrayList<Tweet> getTweets(){
-        return tweets;
-    }
+   // public ArrayList<Tweet> getTweets(){
+   //     return tweets;
+  //  }
 
     public Tweet getMostRecentTweet (){
         return mostRecentTweet;
